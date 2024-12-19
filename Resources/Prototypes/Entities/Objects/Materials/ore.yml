@@ -25,11 +25,13 @@
         friction: 0.2
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: GoldOre
   name: gold ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
   - type: Stack
     stackType: GoldOre
   - type: Sprite
@@ -39,10 +41,10 @@
     materialComposition:
       RawGold: 100
   - type: Extractable
-    grindableSolutionName: goldore
+    grindableSolutionName: food #goldore
   - type: SolutionContainerManager
     solutions:
-      goldore:
+      food: #goldore:
         reagents:
         - ReagentId: Gold
           Quantity: 10
@@ -58,11 +60,13 @@
     count: 1
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: DiamondOre
   name: diamond ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
   - type: Stack
     stackType: DiamondOre
   - type: Sprite
@@ -72,10 +76,10 @@
     materialComposition:
       RawDiamond: 100
   - type: Extractable
-    grindableSolutionName: diamondore
+    grindableSolutionName: food #diamondore
   - type: SolutionContainerManager
     solutions:
-      diamondore:
+      food: #diamondore:
         reagents:
         - ReagentId: Carbon
           Quantity: 20
@@ -124,11 +128,13 @@
       count: 1
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: PlasmaOre
   name: plasma ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
   - type: Stack
     stackType: PlasmaOre
   - type: Sprite
@@ -143,10 +149,10 @@
     castShadows: false
     color: "#e592e7"
   - type: Extractable
-    grindableSolutionName: plasmaore
+    grindableSolutionName: food #plasmaore
   - type: SolutionContainerManager
     solutions:
-      plasmaore:
+      food: #plasmaore:
         reagents:
         - ReagentId: Plasma
           Quantity: 10
@@ -162,11 +168,13 @@
       count: 1
 
 - type: entity
-  parent: OreBase
+  parent: [OreBase, FoodBase] #added edibility to each, since parent does not accept
   id: SilverOre
   name: silver ore
   suffix: Full
   components:
+  - type: Food
+    transferAmount: 10
   - type: Stack
     stackType: SilverOre
   - type: Sprite
@@ -176,10 +184,10 @@
     materialComposition:
       RawSilver: 100
   - type: Extractable
-    grindableSolutionName: silverore
+    grindableSolutionName: food #silverore
   - type: SolutionContainerManager
     solutions:
-      silverore:
+      food: #silverore:
         reagents:
         - ReagentId: Silver
           Quantity: 10

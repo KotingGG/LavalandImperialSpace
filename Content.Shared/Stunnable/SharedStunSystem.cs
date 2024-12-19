@@ -32,6 +32,7 @@ public abstract class SharedStunSystem : EntitySystem
     [Dependency] private readonly EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private readonly StandingStateSystem _standingState = default!;
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
 
     /// <summary>
     /// Friction modifier for knocked down players.
@@ -130,8 +131,9 @@ public abstract class SharedStunSystem : EntitySystem
         if (!TryComp<StatusEffectsComponent>(args.OtherEntity, out var status))
             return;
 
-        TryStun(args.OtherEntity, ent.Comp.Duration, true, status);
-        TryKnockdown(args.OtherEntity, ent.Comp.Duration, true, status);
+        //TryStun(args.OtherEntity, ent.Comp.Duration, true, status); //corvax
+        //TryKnockdown(args.OtherEntity, ent.Comp.Duration, true, status); //corvax
+        _stun.TryParalyze(args.OtherEntity, TimeSpan.FromSeconds(3f), true);
     }
 
     private void OnKnockInit(EntityUid uid, KnockedDownComponent component, ComponentInit args)
