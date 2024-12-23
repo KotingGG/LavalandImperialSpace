@@ -1,0 +1,229 @@
+- type: entity
+  id: MobGoliathLavaland
+  parent: SimpleSpaceMobBaseNoBloodstream
+  name: goliath
+  description: A massive beast that uses long tentacles to ensnare its prey, threatening them is not advised under any conditions.
+  components:
+  - type: Sprite
+    sprite: Imperial/Lavaland/goliath.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: goliath
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      state: glow
+      shader: unshaded
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: goliath
+      Dead:
+        Base: goliath_dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 2.30
+    baseSprintSpeed : 2.30
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      250: Dead
+  - type: MeleeWeapon
+    soundHit:
+      path: "/Audio/Weapons/smash.ogg"
+    angle: 0
+    attackRate: 0.8
+    animation: WeaponArcPunch
+    damage:
+      types:
+        Slash: 5
+        Piercing: 8
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: GoliathCompoundLavaland
+    blackboard:
+      VisionRadius: !type:Single
+        8
+      AggroVisionRadius: !type:Single
+        12
+  - type: NPCUseActionOnTarget
+    actionId: ActionGoliathTentacleLavaland
+  - type: Tag
+    tags:
+    - CannotSuicide
+    - Goliath
+    - FootstepSound
+  - type: NoSlip
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatGoliath
+      amount: 2
+    - id: MaterialGoliathHide1
+
+- type: entity
+  id: ActionGoliathTentacleLavaland
+  name: "[color=red]Tentacle Slam Lavaland[/color]"
+  description: Use your tentacles to grab and stun a target player!
+  components:
+  - type: EntityWorldTargetAction
+    raiseOnUser: true
+    icon:
+      sprite: Imperial/Lavaland/goliath.rsi
+      state: goliath_tentacle_spawn
+    iconOn:
+      sprite: Imperial/Lavaland/goliath.rsi
+      state: goliath_tentacle_wiggle
+    sound:
+      path: "/Audio/Imperial/Lavaland/GoliathTentacle.ogg"
+    event: !type:GoliathSummonTentacleActionLavaland
+    useDelay: 8.4
+    range: 5
+
+- type: entity
+  id: GoliathTentacleLavaland
+  name: tentacle Lavaland
+  suffix: Lavaland
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Imperial/Lavaland/goliath.rsi
+    layers:
+    - state: goliath_tentacle_wiggle
+  - type: StunOnContact
+    blacklist:
+      tags:
+      - Goliath
+  - type: Fixtures
+    fixtures:
+      fix:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        mask:
+        - Impassable
+        layer:
+        - Impassable
+        hard: false
+  - type: TimedDespawn #do this shit by hand because of fucking course.
+    lifetime: 0.4
+  - type: SpawnOnDespawn
+    prototype: EffectGoliathTentacleRetractLavaland
+
+- type: entity
+  id: BaseEffectGoliathTentacleSpawnLavaland
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  abstract: true
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: Imperial/Lavaland/goliath.rsi
+  - type: InteractionOutline
+  - type: TimedDespawn
+    lifetime: 0.675
+
+- type: entity
+  id: EffectGoliathTentacleSpawnLavaland
+  parent: BaseEffectGoliathTentacleSpawnLavaland
+  categories: [ HideSpawnMenu ]
+  name: tentacle
+  components:
+    - type: Sprite
+      state: goliath_tentacle_spawn
+    - type: SpawnOnDespawn
+      prototype: GoliathTentacleLavaland
+
+- type: entity
+  id: EffectGoliathTentacleRetractLavaland
+  parent: BaseEffectGoliathTentacleSpawnLavaland
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: goliath_tentacle_retract
+  - type: EffectVisuals
+  - type: AnimationPlayer
+
+- type: htnCompound
+  id: GoliathCompoundLavaland
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: GoliathMeleeCombatPreconditionLavaland
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: GoliathMeleeCombatPreconditionLavaland
+  branches:
+    - preconditions:
+        - !type:BuckledPrecondition
+          isBuckled: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UnbuckleOperator
+            shutdownState: TaskFinished
+
+    - preconditions:
+        - !type:InContainerPrecondition
+          isInContainer: true
+      tasks:
+        - !type:HTNCompoundTask
+          task: EscapeCompound
+
+    - preconditions:
+        - !type:PulledPrecondition
+          isPulled: true
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UnPullOperator
+            shutdownState: TaskFinished
+
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyMeleeTargets
+        - !type:HTNCompoundTask
+          task: GoliathAttackTargetCompoundLavaland
+
+- type: htnCompound
+  id: GoliathAttackTargetCompoundLavaland
+  branches:
+    - preconditions:
+        - !type:KeyExistsPrecondition
+          key: Target
+      tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            shutdownState: PlanFinished
+            pathfindInPlanning: true
+            removeKeyOnFinish: false
+            targetKey: TargetCoordinates
+            pathfindKey: TargetPathfind
+            rangeKey: MeleeRange
+        - !type:HTNPrimitiveTask
+          operator: !type:JukeOperator
+            jukeType: Away # We're heading straight for the enemy
+        - !type:HTNPrimitiveTask
+          operator: !type:MeleeOperator
+            targetKey: Target
+          preconditions:
+            - !type:KeyExistsPrecondition
+              key: Target
+            - !type:TargetInRangePrecondition
+              targetKey: Target
+              rangeKey: MeleeRange
+          services:
+            - !type:UtilityService
+              id: MeleeService
+              proto: NearbyMeleeTargets
+              key: Target

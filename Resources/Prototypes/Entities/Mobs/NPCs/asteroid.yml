@@ -35,7 +35,7 @@
 - type: entity
   id: MobGoliath
   parent: BaseMobAsteroid
-  name: goliath
+  name: ancient goliath
   description: A massive beast that uses long tentacles to ensnare its prey, threatening them is not advised under any conditions.
   components:
   - type: Sprite
@@ -159,7 +159,7 @@
     sprite: Mobs/Aliens/Asteroid/goliath.rsi
   - type: InteractionOutline
   - type: TimedDespawn
-    lifetime: 0.7
+    lifetime: 0.675
 
 - type: entity
   id: EffectGoliathTentacleSpawn

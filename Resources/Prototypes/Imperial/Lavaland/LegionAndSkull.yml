@@ -67,7 +67,7 @@
   - type: Gun
     fireRate: 0.35
     selectedMode: SemiAuto
-    soundGunshot: /Audio/Imperial/Lavaland/Fauna/attack-legion-skull.ogg
+    soundGunshot: /Audio/Imperial/Lavaland/attack-legion-skull.ogg
   - type: CombatMode
   - type: Butcherable
     spawned:
