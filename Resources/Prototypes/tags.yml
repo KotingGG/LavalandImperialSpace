@@ -58,6 +58,9 @@
   id: Beer
 
 - type: Tag
+  id: BeetleLavaland
+
+- type: Tag
   id: BikeHorn
 
 - type: Tag

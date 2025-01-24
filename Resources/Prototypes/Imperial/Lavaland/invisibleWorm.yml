@@ -61,6 +61,7 @@
         Poison: 2
   - type: NoSlip
 
+<<<<<<< Updated upstream
 # approaching the ore and eating it
 
 - type: htnCompound
@@ -126,6 +127,8 @@
     - !type:TargetAccessibleCon
       curve: !type:BoolCurve
 
+=======
+>>>>>>> Stashed changes
 # main
 
 - type: entity
