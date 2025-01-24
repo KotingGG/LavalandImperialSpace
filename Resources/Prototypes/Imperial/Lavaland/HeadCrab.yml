@@ -1,0 +1,118 @@
+- type: entity
+  name: HeadCrab
+  parent: SimpleSpaceMobBaseNoBloodstream
+  id: MobHeadCrabLavaland
+  suffix: Lavaland
+  description: A walking head!
+  components:
+  - type: HTN
+    rootTask:
+      task: BlobPodCompound
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: Imperial/Lavaland/headcrab.rsi
+    state: HeadCrabLavalandMob
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 60
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: HeadCrabLavalandMob
+      Dead:
+        Base: HeadCrabLavalandMob_dead
+  - type: Bloodstream
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    bloodMaxVolume: 20
+  - type: CombatMode
+  - type: SlowOnDamage
+    speedModifierThresholds:
+      30: 0.7
+      35: 0.5
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Dead  
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 3
+    baseSprintSpeed : 5
+  - type: MeleeWeapon
+    angle: 0
+    animation: WeaponArcBite
+    soundHit:
+      path: /Audio/Effects/bite.ogg
+    damage:
+      types:
+        Slash: 5
+        Piercing: 7
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile 
+  - type: Clothing
+    quickEquip: false
+    sprite: Imperial/Lavaland/headcrab.rsi
+    equippedPrefix: headcrablavalandmob
+    slots:
+      - HEAD
+  - type: Tag
+    tags:
+      - HidesHair
+      - BlobMob
+  - type: ZombieImmune
+  - type: IngestionBlocker
+  - type: IdentityBlocker
+  - type: DoAfter
+  - type: Physics
+    bodyType: KinematicController
+  - type: InteractionOutline
+  - type: Actions
+  - type: Alerts
+  - type: InputMover
+  - type: Examiner
+  - type: MobMover
+  - type: BlobPod
+
+
+- type: htnCompound
+  id: BlobPodCompound
+  branches:
+    - tasks:
+        - !type:HTNCompoundTask
+          task: MeleeCombatCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: ZombifyCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
+
+- type: htnCompound
+  id: ZombifyCompound
+  branches:
+    - tasks:
+        # TODO: Kill this shit
+        - !type:HTNPrimitiveTask
+          operator: !type:PickBlobPodZombifyTargetOperator
+            targetKey: MovementTarget
+            zombifyKey: ZombifyTarget
+            rangeKey: IdleRange
+        - !type:HTNPrimitiveTask
+          operator: !type:MoveToOperator
+            pathfindInPlanning: false
+            targetKey: MovementTarget
+        - !type:HTNPrimitiveTask
+          operator: !type:BlobPodZombifyOperator
+            zombifyKey: ZombifyTarget
