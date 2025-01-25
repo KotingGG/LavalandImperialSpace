@@ -7,7 +7,7 @@
   components:
   - type: HTN
     rootTask:
-      task: BeetleLavalandCompound
+      task: LavalandCompound
   - type: Sprite
     drawdepth: SmallMobs
     sprite: Imperial/Lavaland/beetle_and_eggs.rsi
@@ -35,7 +35,7 @@
     - VimPilot 
   - type: Food
   - type: Thirst
-    startingThirst: 25  # spawn with Okay thirst state
+    startingThirst: 25 # spawn with Okay thirst state
     thresholds:
       OverHydrated: 35
       Okay: 25
@@ -44,7 +44,7 @@
       Dead: 0
     baseDecayRate: 0.001
   - type: Hunger
-    currentHunger: 25   # spawn with Okay hunger state
+    currentHunger: 25 # spawn with Okay hunger state
     thresholds:
       Overfed: 35
       Okay: 25

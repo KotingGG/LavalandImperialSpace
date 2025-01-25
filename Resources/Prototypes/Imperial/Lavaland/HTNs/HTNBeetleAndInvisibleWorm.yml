@@ -1,18 +1,18 @@
 # approaching the ore and eating it
 
 - type: htnCompound
-  id: BeetleLavalandCompound
+  id: LavalandCompound
   branches:
     - tasks:
         - !type:HTNCompoundTask
-          task: FoodCompound1
+          task: FoodCompound11
     - tasks:
         - !type:HTNCompoundTask
           task: IdleCompound
 
 
 - type: htnCompound
-  id: FoodCompound1
+  id: FoodCompound11
   branches:
     # Picks a nearby food, moves into range, then eats it and waits the idle time.
     - tasks:
@@ -21,7 +21,7 @@
             - !type:HungryPrecondition
               minHungerState: Starving  # See HungerThreshold enum
           operator: !type:UtilityOperator
-            proto: NearbyFood1
+            proto: NearbyFood11
 
         - !type:HTNPrimitiveTask
           operator: !type:MoveToOperator
@@ -45,7 +45,7 @@
             key: IdleTime
 
 - type: utilityQuery
-  id: NearbyFood1
+  id: NearbyFood11
   query:
     - !type:ComponentQuery
       components:
